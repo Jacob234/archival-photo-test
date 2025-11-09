@@ -82,28 +82,69 @@ class VisionModelTester:
     """
 
     # Model configurations with pricing (per 1K tokens)
+    # All models accessible via OpenRouter API
+    # Pricing as of 2025 - verify current rates at https://openrouter.ai/models
     MODELS = {
-        "gpt-4o": {
-            "name": "openai/gpt-4o",
-            "description": "GPT-4 Omni - Latest OpenAI vision model",
-            "pricing": {"input_per_1k": 0.005, "output_per_1k": 0.015}
+        # ===== BUDGET TIER (< $1 per 1M input tokens) =====
+        "gemini-1.5-flash": {
+            "name": "google/gemini-1.5-flash",
+            "description": "Gemini 1.5 Flash - Fast, cost-effective Google vision model",
+            "pricing": {"input_per_1k": 0.000075, "output_per_1k": 0.0003}
         },
+        "gemini-2.0-flash": {
+            "name": "google/gemini-2.0-flash-001",
+            "description": "Gemini 2.0 Flash - Latest Google vision model with improved performance",
+            "pricing": {"input_per_1k": 0.0001, "output_per_1k": 0.0004}
+        },
+        "claude-3.5-haiku": {
+            "name": "anthropic/claude-3.5-haiku",
+            "description": "Claude 3.5 Haiku - Fast, affordable Anthropic vision model",
+            "pricing": {"input_per_1k": 0.0008, "output_per_1k": 0.004}
+        },
+
+        # ===== MID TIER ($1-$5 per 1M input tokens) =====
         "gpt-4o-mini": {
             "name": "openai/gpt-4o-mini",
-            "description": "GPT-4 Omni Mini - Cost-optimized vision model",
+            "description": "GPT-4o Mini - Cost-optimized OpenAI vision model",
             "pricing": {"input_per_1k": 0.00015, "output_per_1k": 0.0006}
         },
         "claude-3.5-sonnet": {
             "name": "anthropic/claude-3.5-sonnet",
-            "description": "Claude 3.5 Sonnet - Latest Anthropic vision model",
+            "description": "Claude 3.5 Sonnet - High-performance Anthropic vision model",
             "pricing": {"input_per_1k": 0.003, "output_per_1k": 0.015}
         },
-        "gemini-1=w.5-flash": {
-            "name": "google/gemini-w.5-flash",
-            "description": "Gemini w.5 Flash - Google's fast vision model",
-            "pricing": {"input_per_1k": 0.00075, "output_per_1k": 0.003}
+
+        # ===== PREMIUM TIER ($5+ per 1M input tokens) =====
+        "gpt-4o": {
+            "name": "openai/gpt-4o",
+            "description": "GPT-4o - Flagship OpenAI vision model",
+            "pricing": {"input_per_1k": 0.005, "output_per_1k": 0.015}
+        },
+        "claude-3-opus": {
+            "name": "anthropic/claude-3-opus",
+            "description": "Claude 3 Opus - Most powerful Anthropic vision model",
+            "pricing": {"input_per_1k": 0.015, "output_per_1k": 0.075}
         }
     }
+
+    # Note: For LOCAL vision models (LLaVA, Qwen2-VL, Pixtral, Llama 3.2 Vision):
+    # These models can run on consumer hardware but require different setup:
+    # - Option 1: Run via Ollama (ollama.ai) with models like llava:7b, llama3.2-vision
+    # - Option 2: Use vLLM or text-generation-inference for production deployment
+    # - Option 3: Run with Hugging Face Transformers directly
+    # Pros: Zero API costs, data privacy, no rate limits
+    # Cons: Requires GPU (8GB+ VRAM), slower than cloud APIs, manual setup
+    #
+    # To add local models, you would need to:
+    # 1. Set up Ollama or similar inference server
+    # 2. Create separate client/method for local model inference
+    # 3. Add models to MODELS dict with "local" provider type
+    #
+    # Recommended local models for archival photo analysis:
+    # - Qwen2.5-VL-7B: Excellent document/diagram understanding
+    # - Llama-3.2-11B-Vision: Good general vision capabilities
+    # - LLaVA-NeXT: Strong multimodal reasoning
+    # - Pixtral-12B: Good instruction following
 
     ARCHIVAL_PROMPT = """Describe this historical photograph in detail for archival cataloging in TOML. Include:
 
