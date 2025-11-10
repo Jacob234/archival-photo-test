@@ -85,45 +85,98 @@ class VisionModelTester:
     # All models accessible via OpenRouter API
     # Pricing as of 2025 - verify current rates at https://openrouter.ai/models
     MODELS = {
-        # ===== BUDGET TIER (< $1 per 1M input tokens) =====
-        "gemini-1.5-flash": {
-            "name": "google/gemini-1.5-flash",
-            "description": "Gemini 1.5 Flash - Fast, cost-effective Google vision model",
-            "pricing": {"input_per_1k": 0.000075, "output_per_1k": 0.0003}
+        # ===== FREE TIER ($0 - unlimited testing!) =====
+        "gemini-2.0-flash-free": {
+            "name": "google/gemini-2.0-flash-exp:free",
+            "description": "Gemini 2.0 Flash Experimental - FREE Google vision model",
+            "pricing": {"input_per_1k": 0, "output_per_1k": 0},
+            "local_capable": False
         },
-        "gemini-2.0-flash": {
-            "name": "google/gemini-2.0-flash-001",
-            "description": "Gemini 2.0 Flash - Latest Google vision model with improved performance",
-            "pricing": {"input_per_1k": 0.0001, "output_per_1k": 0.0004}
+        "qwen2.5-vl-32b-free": {
+            "name": "qwen/qwen2.5-vl-32b-instruct:free",
+            "description": "Qwen2.5-VL 32B - FREE, excellent for documents/diagrams",
+            "pricing": {"input_per_1k": 0, "output_per_1k": 0},
+            "local_capable": True  # Can download and run locally
         },
-        "claude-3.5-haiku": {
-            "name": "anthropic/claude-3.5-haiku",
-            "description": "Claude 3.5 Haiku - Fast, affordable Anthropic vision model",
-            "pricing": {"input_per_1k": 0.0008, "output_per_1k": 0.004}
+        "llama-4-scout-free": {
+            "name": "meta-llama/llama-4-scout:free",
+            "description": "Llama 4 Scout - FREE Meta vision model",
+            "pricing": {"input_per_1k": 0, "output_per_1k": 0},
+            "local_capable": True
         },
 
-        # ===== MID TIER ($1-$5 per 1M input tokens) =====
+        # ===== ULTRA-BUDGET TIER (< $0.10 per 1M input tokens) =====
+        "llama-3.2-11b-vision": {
+            "name": "meta-llama/llama-3.2-11b-vision-instruct",
+            "description": "Llama 3.2 11B Vision - Excellent local-capable model",
+            "pricing": {"input_per_1k": 0.000049, "output_per_1k": 0.000049},
+            "local_capable": True
+        },
+        "qwen2.5-vl-32b": {
+            "name": "qwen/qwen2.5-vl-32b-instruct",
+            "description": "Qwen2.5-VL 32B - Outstanding document understanding",
+            "pricing": {"input_per_1k": 0.00005, "output_per_1k": 0.00022},
+            "local_capable": True
+        },
+        "gemini-2.0-flash-lite": {
+            "name": "google/gemini-2.0-flash-lite-001",
+            "description": "Gemini 2.0 Flash Lite - Ultra-efficient Google model",
+            "pricing": {"input_per_1k": 0.000075, "output_per_1k": 0.0003},
+            "local_capable": False
+        },
+        "qwen2.5-vl-72b": {
+            "name": "qwen/qwen2.5-vl-72b-instruct",
+            "description": "Qwen2.5-VL 72B - Larger model, better quality",
+            "pricing": {"input_per_1k": 0.00008, "output_per_1k": 0.00033},
+            "local_capable": True
+        },
+        "pixtral-12b": {
+            "name": "mistralai/pixtral-12b",
+            "description": "Pixtral 12B - Mistral's vision model, local-capable",
+            "pricing": {"input_per_1k": 0.0001, "output_per_1k": 0.0001},
+            "local_capable": True
+        },
+
+        # ===== BUDGET TIER ($0.10-$1 per 1M input tokens) =====
+        "gemini-2.0-flash": {
+            "name": "google/gemini-2.0-flash-001",
+            "description": "Gemini 2.0 Flash - Latest Google vision model",
+            "pricing": {"input_per_1k": 0.0001, "output_per_1k": 0.0004},
+            "local_capable": False
+        },
         "gpt-4o-mini": {
             "name": "openai/gpt-4o-mini",
             "description": "GPT-4o Mini - Cost-optimized OpenAI vision model",
-            "pricing": {"input_per_1k": 0.00015, "output_per_1k": 0.0006}
+            "pricing": {"input_per_1k": 0.00015, "output_per_1k": 0.0006},
+            "local_capable": False
         },
+        "claude-3.5-haiku": {
+            "name": "anthropic/claude-3.5-haiku",
+            "description": "Claude 3.5 Haiku - Fast, affordable Anthropic model",
+            "pricing": {"input_per_1k": 0.0008, "output_per_1k": 0.004},
+            "local_capable": False
+        },
+
+        # ===== MID TIER ($1-$5 per 1M input tokens) =====
         "claude-3.5-sonnet": {
             "name": "anthropic/claude-3.5-sonnet",
-            "description": "Claude 3.5 Sonnet - High-performance Anthropic vision model",
-            "pricing": {"input_per_1k": 0.003, "output_per_1k": 0.015}
+            "description": "Claude 3.5 Sonnet - High-performance Anthropic model",
+            "pricing": {"input_per_1k": 0.003, "output_per_1k": 0.015},
+            "local_capable": False
         },
 
         # ===== PREMIUM TIER ($5+ per 1M input tokens) =====
         "gpt-4o": {
             "name": "openai/gpt-4o",
             "description": "GPT-4o - Flagship OpenAI vision model",
-            "pricing": {"input_per_1k": 0.005, "output_per_1k": 0.015}
+            "pricing": {"input_per_1k": 0.0025, "output_per_1k": 0.010},
+            "local_capable": False
         },
         "claude-3-opus": {
             "name": "anthropic/claude-3-opus",
             "description": "Claude 3 Opus - Most powerful Anthropic vision model",
-            "pricing": {"input_per_1k": 0.015, "output_per_1k": 0.075}
+            "pricing": {"input_per_1k": 0.015, "output_per_1k": 0.075},
+            "local_capable": False
         }
     }
 
